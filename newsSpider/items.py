@@ -8,7 +8,7 @@ from html2text import html2text
 from itemloaders.processors import MapCompose , TakeFirst
 
 class SMH_Article(Item):
-    # define the fields for your item here like:
+    # define the fields forc your item here like:
     source = Field(output_processor = TakeFirst())
     url = Field(output_processor = TakeFirst())
     title = Field(output_processor = TakeFirst())
