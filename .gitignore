@@ -3,6 +3,4 @@ output/*
 __pycache__/
 *.pyc
 newsSpider/__pycache__/*.pyc
-newsSpider/__pycache__/items.cpython-38.pyc
-newsSpider/spiders/__pycache__/guardian_article_spider.cpython-38.pyc
-login.json
+newsSpider/spiders/__pycache__/*.*.pyc

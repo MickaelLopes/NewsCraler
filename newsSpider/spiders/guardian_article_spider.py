@@ -2,7 +2,6 @@ import scrapy
 import json
 from newsSpider.items import Guardian_Article
 from newsSpider.guardian_constants import * 
-import newsSpider.secrets as secret
 from scrapy.loader import ItemLoader
 from  urllib.parse import urlencode
 import sys
