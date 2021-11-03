@@ -11,9 +11,11 @@ if __name__ == '__main__':
     # Timestamp for the filenames
     timeStamp = datetime.now().strftime("%Y-%m-%d_%H%M")
     
-    process = CrawlerProcess(settings={
-        'LOG_FILE' : f'log/Log_newsSpider_{timeStamp}.txt', 
-    }) 
+    process= CrawlerProcess()
+    # process = CrawlerProcess(settings={
+    #     'LOG_FILE' : f'log/Log_newsSpider_{timeStamp}.txt',
+    #     'LOG_ENABLED': True 
+    # }) 
     process.crawl(SMHSpider, person_name='Hans Smith')
     process.crawl(GuardianSpider, person_name='Hans Smith')
     process.start()

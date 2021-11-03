@@ -5,6 +5,7 @@ from newsSpider.guardian_constants import *
 import newsSpider.secrets as secret
 from scrapy.loader import ItemLoader
 from  urllib.parse import urlencode
+import sys
 
 class GuardianSpider(scrapy.Spider):
     name = "guardian_article"
@@ -15,6 +16,7 @@ class GuardianSpider(scrapy.Spider):
             'newsSpider.pipelines.NewsSpiderPipeline': 500
         }
     }
+
     def __init__(self, person_name='Mickael', *args, **kwargs):
         super(GuardianSpider, self).__init__(*args, **kwargs)
         self.person_name = person_name
@@ -26,7 +28,16 @@ class GuardianSpider(scrapy.Spider):
         search_variables = GUARDIAN_BASE_SEARCH_VARIABLES
         search_variables['query'] = self.person_name
         
-        search_variables['api-key'] = secret.GUARDUAN_API_KEY
+        # Login API key 
+        login_file = 'login.json'
+        try:
+            search_variables['api-key'] = json(open(login_file))["GUARDIAN"]["API_KEY"]
+            
+        except Exception as e: 
+            self.logger.error("Cannot load API KEY for Guardian article spider")
+            self.logger.error(f"{e}")
+            self.logger.error("Stopping Crawler for Guardian article spider")
+            sys.exit(1)
 
         # Define API URL 
 
