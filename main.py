@@ -16,7 +16,7 @@ if __name__ == '__main__':
     #     'LOG_FILE' : f'log/Log_newsSpider_{timeStamp}.txt',
     #     'LOG_ENABLED': True 
     # }) 
-    process.crawl(SMHSpider, person_name='Hans Smith')
+    # process.crawl(SMHSpider, person_name='Hans Smith')
     process.crawl(GuardianSpider, person_name='Hans Smith')
     process.start()
 
