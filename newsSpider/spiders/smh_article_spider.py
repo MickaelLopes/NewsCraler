@@ -5,7 +5,7 @@ from newsSpider.items import SMH_Article
 from scrapy.loader import ItemLoader
 from newsSpider.smh_constants import *
 from urllib.parse import urlencode
-
+from newsSpider.utils import _match_name_regex
 
 from scrapy.spidermiddlewares.httperror import HttpError
 from twisted.internet.error import DNSLookupError
@@ -21,15 +21,23 @@ class SMHSpider(scrapy.Spider):
             'newsSpider.pipelines.NewsSpiderPipeline': 500
         }
     }
-    def __init__(self, person_name='Mickael', *args, **kwargs):
-        super(SMHSpider, self).__init__(*args, **kwargs)
-        self.person_name = person_name
-
+    def __init__(self, first_name=None, last_name = None, *args, **kwargs):
+        if first_name == None : 
+            self.logger.error("No first name entered. Crawler stopped")
+            sys.exit(1)
+        elif last_name == None :
+            self.logger.error("No Last name entered. Crawler stopped")
+            sys.exit(1)
+        else :
+            super(SMHSpider, self).__init__(*args, **kwargs)
+            self.first_name = first_name
+            self.last_name = last_name
+        
     def start_requests(self):
         
         # Define search variables 
         search_variables = SMH_BASE_SEARCH_VARIABLES
-        search_variables['query'] = self.person_name
+        search_variables['query'] = f"{self.first_name} AND {self.last_name}"
         
         return [scrapy.http.JsonRequest(    url=SMH_ROOT_SEARCH_URL, 
                                             callback=self.parse_search, 
@@ -67,20 +75,30 @@ class SMHSpider(scrapy.Spider):
         
         # Load answer
         json_response = json.loads(response.text)
-        loader = ItemLoader(item=SMH_Article())
+        
+        # Check if full person name is in article 
+        if _match_name_regex(   first_name = self.first_name, 
+                                last_name= self.last_name, 
+                                text = json_response['asset']['body']) : 
+            self.logger.info(f"Article with full person name detected for article url : {json_response['urls']['published']['smh']['path']}")
+        
+            loader = ItemLoader(item=SMH_Article())
 
-        try: 
-            # Load value in item 
-            loader.add_value('title', json_response['asset']['headlines']['headline'])
-            loader.add_value('article', json_response['asset']['body'])
-            loader.add_value('url',  json_response['urls']['published']['smh']['path'])
-            loader.add_value('last_update', json_response['dates']['modified'])
+            try: 
+                # Load value in item 
+                loader.add_value('title', json_response['asset']['headlines']['headline'])
+                loader.add_value('article', json_response['asset']['body'])
+                loader.add_value('url',  json_response['urls']['published']['smh']['path'])
+                loader.add_value('last_update', json_response['dates']['modified'])
 
-            yield loader.load_item()
+                yield loader.load_item()
 
-        except Exception as e :
-            self.logger.error('Failed to extract data from response')
-            self.logger.error(repr(e))
+            except Exception as e :
+                self.logger.error('Failed to extract data from response')
+                self.logger.error(repr(e))
+        else : 
+            self.logger.info(f"Full person name not detected for article url : {json_response['urls']['published']['smh']['path']}")
+                
 
     def _log_response_error(self, failure):
         # Log error of spider requests

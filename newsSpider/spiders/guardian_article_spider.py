@@ -1,10 +1,13 @@
 import scrapy
 import json
+import sys
+import os
 from newsSpider.items import Guardian_Article
 from newsSpider.guardian_constants import * 
+from newsSpider.utils import _match_name_regex
 from scrapy.loader import ItemLoader
 from  urllib.parse import urlencode
-import sys
+
 
 class GuardianSpider(scrapy.Spider):
     name = "guardian_article"
@@ -16,21 +19,29 @@ class GuardianSpider(scrapy.Spider):
         }
     }
 
-    def __init__(self, person_name='Mickael', *args, **kwargs):
-        super(GuardianSpider, self).__init__(*args, **kwargs)
-        self.person_name = person_name
+    def __init__(self, first_name=None, last_name = None, *args, **kwargs):
+        if first_name == None : 
+            self.logger.error("No first name entered. Crawler stopped")
+            sys.exit(1)
+        elif last_name == None :
+            self.logger.error("No Last name entered. Crawler stopped")
+            sys.exit(1)
+        else :
+            super(GuardianSpider, self).__init__(*args, **kwargs)
+            self.first_name = first_name
+            self.last_name = last_name
 
     def start_requests(self):
         self.logger.info(f'Starting crawling for crawler guardian article')
 
         # Define search variables
         search_variables = GUARDIAN_BASE_SEARCH_VARIABLES
-        search_variables['query'] = self.person_name
+        search_variables['query'] = f"{self.first_name} AND {self.last_name}" 
         
         # Login API key 
-        login_file = 'login.json'
+        login_file = f'{os.getcwd()}/newsSpider/login.json'
         try:
-            search_variables['api-key'] = json(open(login_file))["GUARDIAN"]["API_KEY"]
+            search_variables['api-key'] = json.load(open(login_file))["GUARDIAN"]["API_KEY"]
             
         except Exception as e: 
             self.logger.error("Cannot load API KEY for Guardian article spider")
@@ -49,30 +60,38 @@ class GuardianSpider(scrapy.Spider):
 
     def parse(self, response, search_variables):
         self.logger.info("parse function initiated")
-        self.logger.info(f'Response successful on guardian search for : {self.person_name}')
+        self.logger.info(f'Response successful on guardian search for : {self.first_name} {self.last_name}')
         
         json_response = json.loads(response.text)
         for result in json_response['response']['results']:
+            #Check if nodes is article type 
             if result['type'] == 'article': 
+                self.logger.info(f"Article response detected for article url : {result['webUrl']}")
+                # Check if full person name is in article 
+                if _match_name_regex(   first_name = self.first_name, 
+                                        last_name= self.last_name, 
+                                        text = result['blocks']['body'][0]['bodyTextSummary']) : 
+                    self.logger.info(f"Article with full person name detected for article url : {result['webUrl']}")
+                    
+                    loader = ItemLoader(item=Guardian_Article())
 
-                loader = ItemLoader(item=Guardian_Article())
+                    try: 
 
-                try: 
+                        # Load value in item 
+                        loader.add_value('title', result['webTitle'])
+                        loader.add_value('article', result['blocks']['body'][0]['bodyTextSummary'])
+                        loader.add_value('url',  result['webUrl'])
+                        loader.add_value('last_update', result['blocks']['body'][0]['lastModifiedDate'])
 
-                    # Load value in item 
-                    loader.add_value('title', result['webTitle'])
-                    loader.add_value('article', result['blocks']['body'][0]['bodyTextSummary'])
-                    loader.add_value('url',  result['webUrl'])
-                    loader.add_value('last_update', result['blocks']['body'][0]['lastModifiedDate'])
+                        yield loader.load_item()
 
-                    yield loader.load_item()
-
-                except Exception as e :
-                    self.logger.error('Failed to extract data from response')
-                    self.logger.error(repr(e))
-            
-            else : 
-                pass
+                    except Exception as e :
+                        self.logger.error('Failed to extract data from response')
+                        self.logger.error(repr(e))
+                
+                else : 
+                    self.logger.info(f"Full person name not detected for article url : {result['webUrl']}")
+                    
         
         # Crawl next page
         if  (json_response['response']['currentPage'] < json_response['response']['pages']) and json_response['response']['currentPage'] < 3 :
