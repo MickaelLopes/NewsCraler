@@ -1,5 +1,9 @@
 {
     "GUARDIAN" : {
+<<<<<<< HEAD
         "API_KEY": "23cbcdb6-8a92-427f-b5e8-2b900542452e" 
+=======
+        "API_KEY": null 
+>>>>>>> 2d70f73e5c5b43e7145c686ed3465a820416a05c
     }
 }

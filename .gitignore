@@ -5,5 +5,4 @@ __pycache__/
 newsSpider/__pycache__/*.pyc
 newsSpider/spiders/__pycache__/*.*.pyc
 newsSpider/login.json
-newsSpider/login.json
-newsSpider/login.json
+

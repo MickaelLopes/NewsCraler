@@ -11,7 +11,7 @@ import argparse
 
 if __name__ == '__main__': 
 
-    parser = argparse.ArgumentParser(description= "Module to crawl data based on a person name on guardian and sydney morning herald")
+    parser = argparse.ArgumentParser(description= "Module to crawl data based on a person name on guardian and sydney morning he")
     parser.add_argument("--first", required=True, help="First name of the person to search", type=str )
     parser.add_argument("--last", required=True,help = "Last name of the person to search", type=str )
 
