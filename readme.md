@@ -11,6 +11,14 @@ Search can be called using cmd line. For example, for searching news on __Elon M
 python main.py --first Elon --last Musk
 ```
 
+### Specific Crawler
+
+if you want to use a particular crawler (guardian or SMH), use the following tags -s (for SMH) or -g (for the guardian): 
+```bash 
+python main.py --first Elon --last Musk -s 
+python main.py --first Elon --last Musk -g 
+```
+
 ## Prerequisites
 
 ### Libraries 
@@ -28,3 +36,23 @@ Once the API key received, entered the API key into the file :
 ```
 newsSpider/login.json 
 ```
+
+## Output file
+
+### logfile
+Each time the crawler is run, a timestamp log file is created under the folfer
+```
+\log\
+``` 
+
+### data
+The data crawl from the news website are save in timestamp json file under the folder : 
+```
+\output\
+``` 
+Each article scraped contains the following fields : 
+- title : Headline of the article
+- article : body of the article 
+- url : URL path of the article
+- last_update : last modified date of the article
+- source : Source of the article (either _Guardian_ or _SMH_)  

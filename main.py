@@ -12,21 +12,30 @@ import argparse
 if __name__ == '__main__': 
 
     parser = argparse.ArgumentParser(description= "Module to crawl data based on a person name on guardian and sydney morning he")
-    parser.add_argument("--first", required=True, help="First name of the person to search", type=str )
-    parser.add_argument("--last", required=True,help = "Last name of the person to search", type=str )
-
+    parser.add_argument("-f", "--first", required=True, help="First name of the person to search", type=str )
+    parser.add_argument("-l","--last", required=True,help = "Last name of the person to search", type=str )
+    parser.add_argument("-g", "--guardian", action = 'store_true', help="Only use The Guardian crawler")
+    parser.add_argument("-s", "--smh", action='store_true', help="Only use the Sydney Morning Herald crawler")
     args = parser.parse_args()
     
     # Timestamp for the filenames
     timeStamp = datetime.now().strftime("%Y-%m-%d_%H%M")
     
-    # process= CrawlerProcess()
     process = CrawlerProcess(settings={
         'LOG_FILE' : f'log/Log_newsSpider_{timeStamp}.txt',
         'LOG_ENABLED': True 
     }) 
-    process.crawl(SMHSpider, first_name=args.first, last_name=args.last)
-    process.crawl(GuardianSpider, first_name=args.first, last_name=args.last)
+
+    if ((args.guardian) & (args.smh)) | ~((args.guardian) & (args.smh)) : 
+        process.crawl(SMHSpider, first_name=args.first, last_name=args.last)
+        process.crawl(GuardianSpider, first_name=args.first, last_name=args.last)
+
+    elif args.guardian :
+        process.crawl(GuardianSpider, first_name=args.first, last_name=args.last)
+
+    elif args.smh : 
+        process.crawl(SMHSpider, first_name=args.first, last_name=args.last)
+            
     process.start()
 
     
