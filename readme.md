@@ -7,6 +7,6 @@ The Crawler take as entry  the first and last name of person searched.
 
 Search can be called using cmd line. For example, for searching news on Elon Musk
 
-''' bash 
+``` bash 
 python main.py --first Elon --last Musk
-'''
+```
