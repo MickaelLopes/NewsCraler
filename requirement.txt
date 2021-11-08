@@ -1,0 +1,39 @@
+attrs @ file:///tmp/build/80754af9/attrs_1620827162558/work
+Automat @ file:///tmp/build/80754af9/automat_1600298431173/work
+bcrypt @ file:///tmp/build/80754af9/bcrypt_1597936221426/work
+certifi==2021.10.8
+cffi @ file:///tmp/build/80754af9/cffi_1625807838443/work
+constantly==15.1.0
+cryptography @ file:///tmp/build/80754af9/cryptography_1635366571107/work
+cssselect==1.1.0
+html2text==2020.1.16
+hyperlink @ file:///tmp/build/80754af9/hyperlink_1610130746837/work
+idna @ file:///tmp/build/80754af9/idna_1622654382723/work
+incremental==17.5.0
+iniconfig @ file:///home/linux1/recipes/ci/iniconfig_1610983019677/work
+itemadapter @ file:///tmp/build/80754af9/itemadapter_1626442940632/work
+itemloaders @ file:///home/conda/feedstock_root/build_artifacts/itemloaders_1605273565796/work
+jmespath @ file:///home/conda/feedstock_root/build_artifacts/jmespath_1589369830981/work
+lxml @ file:///tmp/build/80754af9/lxml_1616443220220/work
+more-itertools @ file:///tmp/build/80754af9/more-itertools_1635423142362/work
+packaging @ file:///tmp/build/80754af9/packaging_1625611678980/work
+parsel @ file:///tmp/build/80754af9/parsel_1613041580045/work
+pluggy @ file:///tmp/build/80754af9/pluggy_1615976321666/work
+py @ file:///tmp/build/80754af9/py_1607971587848/work
+pyasn1 @ file:///Users/ktietz/demo/mc3/conda-bld/pyasn1_1629708007385/work
+pyasn1-modules==0.2.8
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+PyDispatcher==2.0.5
+PyHamcrest @ file:///tmp/build/80754af9/pyhamcrest_1615748656804/work
+pyOpenSSL @ file:///tmp/build/80754af9/pyopenssl_1635333100036/work
+pyparsing @ file:///tmp/build/80754af9/pyparsing_1635766073266/work
+pytest==6.2.4
+pytest-runner @ file:///tmp/build/80754af9/pytest-runner_1623663836848/work
+queuelib==1.5.0
+Scrapy @ file:///tmp/build/80754af9/scrapy_1606864680731/work
+service-identity @ file:///Users/ktietz/demo/mc3/conda-bld/service_identity_1629460757137/work
+six @ file:///tmp/build/80754af9/six_1623709665295/work
+toml @ file:///tmp/build/80754af9/toml_1616166611790/work
+Twisted @ file:///tmp/build/80754af9/twisted_1614874387228/work
+w3lib @ file:///Users/ktietz/demo/mc3/conda-bld/w3lib_1629359764703/work
+zope.interface @ file:///tmp/build/80754af9/zope.interface_1625035545636/work
